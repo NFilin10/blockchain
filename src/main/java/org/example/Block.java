@@ -1,7 +1,5 @@
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
+package org.example;
+import src.main.java.org.example.BlockHeader;
 
 public class Block {
 
