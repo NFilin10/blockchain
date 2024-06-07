@@ -4,20 +4,8 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 
 public class BlockHeader {
-    public Integer getNonce() {
-        return nonce;
-    }
-
+    private String merkleRoot;
     private Integer nonce = 0;
-
-    public String getPreviousHash() {
-        return previousHash;
-    }
-
-    public String getTimeStamp() {
-        return timeStamp;
-    }
-
     private String previousHash;
     private String hash;
     private final String timeStamp;
@@ -28,20 +16,25 @@ public class BlockHeader {
 
 
 
-    public BlockHeader(String previousHash) {
+    public BlockHeader(String previousHash, String merkleRoot) {
         this.previousHash = previousHash;
+        this.merkleRoot = merkleRoot;
         this.timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new java.util.Date());
     }
 
-    public BlockHeader() {
+    public BlockHeader(String merkleRoot) {
+        this.merkleRoot = merkleRoot;
         this.timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new java.util.Date());
     }
 
-    public String calculateBlockHash(int index, int nonce, String previousHash, String timeStamp) throws NoSuchAlgorithmException {
-        String dataToHash = index + nonce + previousHash + timeStamp;
+    public String getMerkleRoot() {
+        return merkleRoot;
+    }
+
+    public  static  String calculateBlockHash(String data) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] encodedhash = digest.digest(
-                dataToHash.getBytes(StandardCharsets.UTF_8));
+                data.getBytes(StandardCharsets.UTF_8));
         return bytesToHex(encodedhash);
     }
 
@@ -49,7 +42,7 @@ public class BlockHeader {
     public void mineBlock(int blockHeight, int difficulty) throws NoSuchAlgorithmException {
 
         while (true){
-            String hash = calculateBlockHash(blockHeight, nonce, previousHash, timeStamp);
+            String hash = calculateBlockHash(blockHeight + nonce + previousHash + timeStamp);
             if (hash.substring(0, difficulty).equals("0".repeat(difficulty))){
                 this.hash = hash;
                 return ;
@@ -69,5 +62,17 @@ public class BlockHeader {
             hexString.append(hex);
         }
         return hexString.toString();
+    }
+
+    public Integer getNonce() {
+        return nonce;
+    }
+
+    public String getPreviousHash() {
+        return previousHash;
+    }
+
+    public String getTimeStamp() {
+        return timeStamp;
     }
 }

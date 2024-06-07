@@ -13,6 +13,7 @@ public class Main {
             System.out.println("Index: " + block.getBlockHeight());
             System.out.println("Nonce: " + block.getBlockHeader().getNonce());
             System.out.println("Transaction: " + block.getTransaction());
+            System.out.println("MerkleRoot: " + block.getBlockHeader().getMerkleRoot());
             System.out.println("##############################");
             System.out.println();
 

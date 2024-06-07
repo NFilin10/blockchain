@@ -24,15 +24,18 @@ public class Blockchain {
     public void addBlock(int blockHeight) throws NoSuchAlgorithmException {
         BlockHeader blockHeader;
         String transaction;
+        String merkleRoot;
 
         if (!chain.isEmpty()){
             Block lastBlock = chain.getLast();
             transaction = "t" + blockHeight + " " + (lastBlock.getBlockHeight() + 1);
-            blockHeader = new BlockHeader(lastBlock.getBlockHeader().getHash());
+            merkleRoot = BlockHeader.calculateBlockHash(transaction);
+            blockHeader = new BlockHeader(lastBlock.getBlockHeader().getHash(), merkleRoot);
             //Genesis block
         } else {
             transaction = "t0";
-            blockHeader = new BlockHeader();
+            merkleRoot = BlockHeader.calculateBlockHash(transaction);
+            blockHeader = new BlockHeader(merkleRoot);
         }
 
         blockHeader.mineBlock(blockHeight, difficulty);
@@ -56,7 +59,7 @@ public class Blockchain {
             Block previous = chain.get(i - 1);
             BlockHeader previousBlockHeader = previous.getBlockHeader();
 
-            String hash = currentBlockHeader.calculateBlockHash(current.getBlockHeight(), currentBlockHeader.getNonce(), currentBlockHeader.getPreviousHash(), currentBlockHeader.getTimeStamp());
+            String hash = BlockHeader.calculateBlockHash(current.getBlockHeight() + currentBlockHeader.getNonce() + currentBlockHeader.getPreviousHash() + currentBlockHeader.getTimeStamp());
 
             if (!currentBlockHeader.getHash().equals(hash)){
                 return false;
