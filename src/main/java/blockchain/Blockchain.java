@@ -1,13 +1,14 @@
-package org.example;
+package blockchain;
 
 
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import src.main.java.org.example.BlockHeader;
+import db.Database;
 
 public class Blockchain {
 
@@ -19,16 +20,16 @@ public class Blockchain {
 
     private final List<Block> chain = new ArrayList<>();
 
-    public Blockchain(int difficulty) throws NoSuchAlgorithmException, JsonProcessingException {
+    public Blockchain(int difficulty) throws NoSuchAlgorithmException, IOException {
         this.difficulty = difficulty;
         genesisBlock();
     }
 
-    private void genesisBlock() throws NoSuchAlgorithmException, JsonProcessingException {
+    private void genesisBlock() throws NoSuchAlgorithmException, IOException {
         addBlock(0);
     }
 
-    public String addBlock(int blockHeight) throws NoSuchAlgorithmException, JsonProcessingException {
+    public String addBlock(int blockHeight) throws NoSuchAlgorithmException, IOException {
         BlockHeader blockHeader;
         String transaction;
         String merkleRoot;
@@ -52,6 +53,7 @@ public class Blockchain {
         if (chainValidity){
             System.out.println("VALID");
             ObjectMapper mapper = new ObjectMapper();
+            Database.writeToFile(chain, mapper);
             return mapper.writeValueAsString(chain);
         } else {
             System.out.println("ERROR");

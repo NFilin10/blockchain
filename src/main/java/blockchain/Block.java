@@ -1,5 +1,4 @@
-package org.example;
-import src.main.java.org.example.BlockHeader;
+package blockchain;
 
 public class Block {
 

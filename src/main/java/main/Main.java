@@ -1,10 +1,13 @@
-package org.example;
+package main;
+import blockchain.Block;
+import blockchain.Blockchain;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
 public class Main {
-    public static void main(String[] args) throws NoSuchAlgorithmException, JsonProcessingException {
+    public static void main(String[] args) throws NoSuchAlgorithmException, IOException {
         Blockchain blockchain = new Blockchain(4);
         blockchain.addBlock(1);
         blockchain.addBlock(2);
